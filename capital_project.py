@@ -14,7 +14,7 @@ def generate_the_data():
     'Content-Type': 'application/json',
     'version': '1.0'
     }
-    for i in range(4):
+    for i in range(1):
         quantity = 25
         payload = json.dumps({"quantity": quantity})
         account_id = "95526223"
@@ -76,14 +76,39 @@ def user_question():
     shopping_budget = float(input('Enter how much you want to spend on Shopping'))
     other_budget = float(input('Enter how much you want to spend on other'))
 def sorted_amount():
-    sorted_amount = [(transaction['amount'], transaction['creditDebitIndicator'], transaction['merchant']['category'])
+    sorted_amount_list = [(transaction['amount'], transaction['creditDebitIndicator'], transaction['merchant']['category'])
                   for transaction in full_dictionarry['Transactions']]
-    return sorted_amount
+    return sorted_amount_list
+def categorize_transactions(sorted_amount_list):
+    categories_data = {}  # Dictionary to store category-wise spending information
 
+    for x in sorted_amount_list:
+        amount, credit_debit, category = x[0], x[1], x[2] 
+        (29.36, 'Debit', 'Education')
+        # Check if the category is already in the dictionary, if not, create it
+        if category not in categories_data:
+            categories_data[category] = {
+                'total_amount': 0,
+                'debit_amount': 0,
+                'credit_amount': 0
+            }
+
+        # Update total amount for the category
+        categories_data[category]['total_amount'] += amount
+
+        # Categorize transactions into debit and credit
+        if credit_debit == 'Debit':
+            categories_data[category]['debit_amount'] += amount
+        elif credit_debit == 'Credit':
+            categories_data[category]['credit_amount'] += amount
+
+    return categories_data
+
+print(categorize_transactions(sorted_amount_list=sorted_amount()))
 
 # print(categories_list())
 # print(final_balance)
-ploting_categories(categories_list())
+# ploting_categories(categories_list())
 
 
 
