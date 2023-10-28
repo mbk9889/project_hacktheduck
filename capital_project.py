@@ -4,6 +4,8 @@ full_dictionarry = {'Transactions':[]}
 
 import json
 import requests
+from collections import Counter
+
 
 def generate_the_data():
     global full_dictionarry
@@ -30,15 +32,16 @@ def generate_the_data():
                 full_dictionarry["Transactions"].append(json_response["Transactions"][x])
 def categories_list():
     categories_list = []
-
+    
     # Loop through the list of dictionaries and extract the 'category' key
     for i in full_dictionarry['Transactions']:
         # Check if 'merchant' key exists in the transaction dictionary
         if 'merchant' in i and 'category' in i['merchant']:
             # Append the 'category' value to the categories_list
             categories_list.append(i['merchant']['category'])
-
-    return categories_list
+    
+    sorted_dict = Counter(categories_list)
+    return sorted_dict
 
 generate_the_data()
 print(categories_list())
