@@ -75,6 +75,10 @@ def user_question():
     auto_Transport_budget = float(input('Enter how much you want to spend on Auto and Transport'))
     shopping_budget = float(input('Enter how much you want to spend on Shopping'))
     other_budget = float(input('Enter how much you want to spend on other'))
+def sorted_amount():
+    sorted_amount = [(transaction['amount'], transaction['creditDebitIndicator'], transaction['merchant']['category'])
+                  for transaction in full_dictionarry['Transactions']]
+    return sorted_amount
 
 
 # print(categories_list())
