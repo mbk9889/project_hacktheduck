@@ -28,10 +28,21 @@ def generate_the_data():
             else:
                 # if the transaction is fine and accepted then we will add it to the dictionary to build the database we want and test on it ... we append the (transaction [x] because it is a list of a transactions so its indix is x ) ... 
                 full_dictionarry["Transactions"].append(json_response["Transactions"][x])
+def categories_list():
+    categories_list = []
+
+    # Loop through the list of dictionaries and extract the 'category' key
+    for i in full_dictionarry['Transactions']:
+        # Check if 'merchant' key exists in the transaction dictionary
+        if 'merchant' in i and 'category' in i['merchant']:
+            # Append the 'category' value to the categories_list
+            categories_list.append(i['merchant']['category'])
+
+    return categories_list
 
 generate_the_data()
+print(categories_list())
 
-# print(final_balance)
 
 
 
