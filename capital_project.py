@@ -5,7 +5,7 @@ full_dictionarry = {'Transactions':[]}
 import json
 import requests
 from collections import Counter
-
+import matplotlib.pyplot as plt
 
 def generate_the_data():
     global full_dictionarry
@@ -14,7 +14,7 @@ def generate_the_data():
     'Content-Type': 'application/json',
     'version': '1.0'
     }
-    for i in range(1):
+    for i in range(4):
         quantity = 25
         payload = json.dumps({"quantity": quantity})
         account_id = "95526223"
@@ -43,7 +43,6 @@ def categories_list():
     sorted_dict = Counter(categories_list)
     return sorted_dict
 def ploting_categories(sorted_dict):
-    import matplotlib.pyplot as plt
 
     # Extract category names and their counts
     categories = list(sorted_dict.keys())
@@ -103,9 +102,39 @@ def categorize_transactions(sorted_amount_list):
             categories_data[category]['credit_amount'] += amount
 
     return categories_data
+def plot_category_spending(categories_data):
+    
+    categories = categories_data.keys()
+    total_amounts = [categories_data[category]['total_amount'] for category in categories]
+    debit_amounts = [categories_data[category]['debit_amount'] for category in categories]
+    credit_amounts = [categories_data[category]['credit_amount'] for category in categories]
 
-print(categorize_transactions(sorted_amount_list=sorted_amount()))
+    # Define colors for total amount, total debit, and total credit
+    colors = ['blue', 'yellow', 'green']
 
+    # Create a bar chart with distinct colors for total amount, total debit, and total credit
+    plt.figure(figsize=(12, 8))
+    bar_width = 0.2
+    opacity = 0.8
+
+    index = range(len(categories))
+    plt.bar(index, total_amounts, bar_width, alpha=opacity, color=colors[0], label='Total Amount')
+    plt.bar([p + bar_width for p in index], debit_amounts, bar_width, alpha=opacity, color=colors[1], label='Total Debit')
+    plt.bar([p + 2 * bar_width for p in index], credit_amounts, bar_width, alpha=opacity, color=colors[2], label='Total Credit')
+
+    plt.xlabel('Categories')
+    plt.ylabel('Amount')
+    plt.title('Category-wise Spending')
+    plt.xticks([p + bar_width for p in index], categories)
+    plt.legend()
+    plt.tight_layout()
+
+
+    # Show the plot
+    plt.show()
+
+
+print(plot_category_spending(categories_data=categorize_transactions(sorted_amount_list=sorted_amount())))
 # print(categories_list())
 # print(final_balance)
 # ploting_categories(categories_list())
