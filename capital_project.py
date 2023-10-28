@@ -14,7 +14,7 @@ def generate_the_data():
     'Content-Type': 'application/json',
     'version': '1.0'
     }
-    for i in range(4):
+    for i in range(1):
         quantity = 25
         payload = json.dumps({"quantity": quantity})
         account_id = "95526223"
@@ -68,12 +68,7 @@ def ploting_categories(sorted_dict):
 
     pass
 generate_the_data()
-def user_question():
-    food_and_Dining_budget = float(input('Enter how much you want to spend on Food and Dining'))
-    bills_Utilities_budget  = float(input('Enter how much you want to spend on Bills and Utilities'))
-    auto_Transport_budget = float(input('Enter how much you want to spend on Auto and Transport'))
-    shopping_budget = float(input('Enter how much you want to spend on Shopping'))
-    other_budget = float(input('Enter how much you want to spend on other'))
+
 def sorted_amount():
     sorted_amount_list = [(transaction['amount'], transaction['creditDebitIndicator'], transaction['merchant']['category'])
                   for transaction in full_dictionarry['Transactions']]
@@ -102,17 +97,41 @@ def categorize_transactions(sorted_amount_list):
             categories_data[category]['credit_amount'] += amount
 
     return categories_data
-def plot_category_spending(categories_data):
+
+def user_question():
+    food_and_dining_budget = float(input('Enter how much you want to spend on Food and Dining: '))
+    bills_utilities_budget = float(input('Enter how much you want to spend on Bills and Utilities: '))
+    auto_transport_budget = float(input('Enter how much you want to spend on Auto and Transport: '))
+    shopping_budget = float(input('Enter how much you want to spend on Shopping: '))
+    education_budget = float(input('Enter how much you want to spend on Education: '))
+    personal_care_budget = float(input('Enter how much you want to spend on Personal Care: '))
+    gifts_donations_budget = float(input('Enter how much you want to spend on Gifts and Donations: '))
+    entertainment_budget = float(input('Enter how much you want to spend on Entertainment: '))
     
-    categories = categories_data.keys()
+    return {
+        'Food & Dining': food_and_dining_budget,
+        'Bills & Utilities': bills_utilities_budget,
+        'Auto & Transport': auto_transport_budget,
+        'Shopping': shopping_budget,
+        'Education': education_budget,
+        'Personal Care': personal_care_budget,
+        'Gifts & Donations': gifts_donations_budget,
+        'Entertainment': entertainment_budget
+    }
+def plot_category_spending(categories_data, budgets):
+    categories = list(categories_data.keys())
     total_amounts = [categories_data[category]['total_amount'] for category in categories]
     debit_amounts = [categories_data[category]['debit_amount'] for category in categories]
     credit_amounts = [categories_data[category]['credit_amount'] for category in categories]
+    budget_limits = [budgets[category] for category in categories]
 
-    # Define colors for total amount, total debit, and total credit
-    colors = ['blue', 'yellow', 'green']
+    # Calculate differences between total spent and budget for each category
+    differences = [total - budget for total, budget in zip(total_amounts, budget_limits)]
 
-    # Create a bar chart with distinct colors for total amount, total debit, and total credit
+    # Define colors for total amount, total debit, total credit, and exceeded budget
+    colors = ['blue', 'yellow', 'green', 'red']
+
+    # Create a bar chart with distinct colors for total amount, total debit, total credit, and exceeded budget
     plt.figure(figsize=(12, 8))
     bar_width = 0.2
     opacity = 0.8
@@ -121,20 +140,28 @@ def plot_category_spending(categories_data):
     plt.bar(index, total_amounts, bar_width, alpha=opacity, color=colors[0], label='Total Amount')
     plt.bar([p + bar_width for p in index], debit_amounts, bar_width, alpha=opacity, color=colors[1], label='Total Debit')
     plt.bar([p + 2 * bar_width for p in index], credit_amounts, bar_width, alpha=opacity, color=colors[2], label='Total Credit')
+    plt.bar([p + 3 * bar_width for p in index], differences, bar_width, alpha=opacity, color=colors[3], label='Exceeded Budget')
 
     plt.xlabel('Categories')
     plt.ylabel('Amount')
-    plt.title('Category-wise Spending')
-    plt.xticks([p + bar_width for p in index], categories)
+    plt.title('Category-wise Spending and Budget Comparison')
+    plt.xticks([p + 1.5 * bar_width for p in index], categories)
     plt.legend()
     plt.tight_layout()
 
+    # Save the plot as an image (optional)
+    plt.savefig('category_spending_and_budget_chart.png')
 
     # Show the plot
     plt.show()
 
+# Example usage:
+# user_budgets = user_question()
+# categorized_data = {'Bills & Utilities': {'total_amount': -55.33, 'debit_amount': -55.33, 'credit_amount': 0}, ...}
+# plot_category_spending(categorized_data, user_budgets)
 
-print(plot_category_spending(categories_data=categorize_transactions(sorted_amount_list=sorted_amount())))
+
+print(plot_category_spending(categories_data=categorize_transactions(sorted_amount_list=sorted_amount()), budgets=user_question()))
 # print(categories_list())
 # print(final_balance)
 # ploting_categories(categories_list())
