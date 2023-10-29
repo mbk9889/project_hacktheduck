@@ -19,7 +19,7 @@ def generate_the_data():
         'Content-Type': 'application/json',
         'version': '1.0'
     }
-    for i in range(4):
+    for i in range(2):
         quantity = 25
         payload = json.dumps({"quantity": quantity})
         account_id = "95526223"
@@ -103,15 +103,15 @@ def create_gui():
     
     layout = [
         [sg.Text("Enter Budgets:", font=("Helvetica", 14))],
-        [sg.Text("Food & Dining:", size=(15, 1)), sg.InputText(key="FoodDining", size=(15, 1))],
-        [sg.Text("Bills & Utilities:", size=(15, 1)), sg.InputText(key="BillsUtilities", size=(15, 1))],
-        [sg.Text("Auto & Transport:", size=(15, 1)), sg.InputText(key="AutoTransport", size=(15, 1))],
-        [sg.Text("Shopping:", size=(15, 1)), sg.InputText(key="Shopping", size=(15, 1))],
-        [sg.Text("Education:", size=(15, 1)), sg.InputText(key="Education", size=(15, 1))],
-        [sg.Text("Personal Care:", size=(15, 1)), sg.InputText(key="PersonalCare", size=(15, 1))],
-        [sg.Text("Gifts & Donations:", size=(15, 1)), sg.InputText(key="GiftsDonations", size=(15, 1))],
-        [sg.Text("Entertainment:", size=(15, 1)), sg.InputText(key="Entertainment", size=(15, 1))],
-        [sg.Button("Submit", size=(10, 1), font=("Helvetica", 12))],
+        [sg.Text("Food & Dining:", size=(15, 1)), sg.InputText(key="FoodDining", size=(30, 1))],
+        [sg.Text("Bills & Utilities:", size=(15, 1)), sg.InputText(key="BillsUtilities", size=(30, 1))],
+        [sg.Text("Auto & Transport:", size=(15, 1)), sg.InputText(key="AutoTransport", size=(30, 1))],
+        [sg.Text("Shopping:", size=(15, 1)), sg.InputText(key="Shopping", size=(30, 1))],
+        [sg.Text("Education:", size=(15, 1)), sg.InputText(key="Education", size=(30, 1))],
+        [sg.Text("Personal Care:", size=(15, 1)), sg.InputText(key="PersonalCare", size=(30, 1))],
+        [sg.Text("Gifts & Donations:", size=(15, 1)), sg.InputText(key="GiftsDonations", size=(30, 1))],
+        [sg.Text("Entertainment:", size=(15, 1)), sg.InputText(key="Entertainment", size=(30, 1))],
+        [sg.Button("Submit", size=(20, 1), font=("Helvetica", 12))],
         [sg.Button("All Transactions in Categories", size=(25, 1), font=("Helvetica", 12))],
         [sg.Button("Detailed Budget", size=(25, 1), font=("Helvetica", 12))],
         [sg.Image(filename='Capital_One_logo.svg.png', key='IMAGE')],
@@ -146,6 +146,9 @@ def create_gui():
 
     window.close()
 def ploting_categories():
+    explosion = (0,0.2,0,0,0,0,0,0)
+
+
     # Replace this line with your logic to get sorted_dict
     sorted_dict = categories_list()
     
@@ -159,7 +162,7 @@ def ploting_categories():
 
     # Create a pie chart with percentages
     plt.figure(figsize=(8, 8))
-    plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors)
+    plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors, explode=explosion, shadow=True)
     plt.title('Occurrences of Categories')
     
 
