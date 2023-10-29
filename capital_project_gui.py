@@ -161,6 +161,7 @@ def ploting_categories():
     percentages = [(count / total_occurrences) * 100 for count in counts]
 
     # Create a pie chart with percentages
+    plt.style.use('classic')
     plt.figure(figsize=(8, 8))
     plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors, explode=explosion, shadow=True)
     plt.title('Occurrences of Categories')
