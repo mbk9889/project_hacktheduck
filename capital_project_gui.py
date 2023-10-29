@@ -1,8 +1,6 @@
 import PySimpleGUI as sg
 import matplotlib.pyplot as plt
 from collections import Counter
-import tkinter as tk
-from tkinter import messagebox
 import json
 import requests
 from collections import Counter
@@ -118,7 +116,7 @@ def create_gui():
         [sg.Button("Detailed Budget", size=(25, 1), font=("Helvetica", 12))],
         [sg.Image(filename='Capital_One_logo.svg.png', key='IMAGE')],
     ]
-    window = sg.Window("Financial Data Analysis", layout, finalize=True, element_justification='c')
+    window = sg.Window("Financial Data Analysis", layout, finalize=False, element_justification='c')
     
     
     while True:
@@ -148,25 +146,22 @@ def create_gui():
 
     window.close()
 def ploting_categories():
-    'this functionis for the first button to put out the catigory of all the transactions that happend'
+    # Replace this line with your logic to get sorted_dict
     sorted_dict = categories_list()
+    
     # Extract category names and their counts
     categories = list(sorted_dict.keys())
     counts = list(sorted_dict.values())
 
-    # Create a bar chart
-    plt.figure(figsize=(10, 6))
-    plt.barh(categories, counts, color='skyblue')
-    plt.xlabel('Number of Occurrences')
-    plt.ylabel('Categories')
-    plt.title('Occurrences of Categories')
-    plt.gca().invert_yaxis()  # Invert the y-axis for better readability
-    
-    
-    plt.tight_layout()
+    # Calculate percentages
+    total_occurrences = sum(counts)
+    percentages = [(count / total_occurrences) * 100 for count in counts]
 
-    # Save the plot as an image (optional)
-    plt.savefig('categories_bar_chart.png')
+    # Create a pie chart with percentages
+    plt.figure(figsize=(8, 8))
+    plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors)
+    plt.title('Occurrences of Categories')
+    
 
     # Show the plot
     plt.show()
